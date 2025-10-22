@@ -1,0 +1,31 @@
+{
+    "Comment": "Scan EBS snapshots in parallel across accounts",
+    "StartAt": "ScanAccounts",
+    "States": {
+      "ScanAccounts": {
+        "Type": "Map",
+        "ItemsPath": "$.roles",
+        "MaxConcurrency": 40,
+        "Parameters": {
+          "role.$": "$$.Map.Item.Value"
+        },
+        "Iterator": {
+          "StartAt": "InvokeSnapshotLambda",
+          "States": {
+            "InvokeSnapshotLambda": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::lambda:invoke",
+              "Parameters": {
+                "FunctionName": "${lambda_arn}",
+                "Payload": {
+                  "role.$": "$.role"
+                }
+              },
+              "End": true
+            }
+          }
+        },
+        "End": true
+      }
+    }
+  }

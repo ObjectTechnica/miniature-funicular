@@ -1,0 +1,6 @@
+lambda_function_name     = "snapshot-lifecycle"
+region                   = "us-east-1"
+snapshot_checker_roles   = [
+    "arn:aws:iam::111111111111:role/SnapshotScanRole",
+    "arn:aws:iam::222222222222:role/SnapshotScanRole"
+]
